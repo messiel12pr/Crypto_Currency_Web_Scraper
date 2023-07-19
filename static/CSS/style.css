@@ -1,0 +1,18 @@
+body {
+    background-color: #344E5C;
+    font-family: sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    background-color: #4AB19D;
+    width: 700px;
+    height: 700px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 15px;  
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
