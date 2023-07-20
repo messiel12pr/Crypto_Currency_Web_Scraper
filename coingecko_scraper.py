@@ -69,7 +69,7 @@ def convert_to_list_of_dicts(coin_dict):
 
 
 def dict_to_csv(coin_list_of_dicts):
-    with open("data.csv", mode="w", newline="") as file:
+    with open("../cache/data.csv", mode="w", newline="") as file:
         writer = csv.DictWriter(file, fieldnames=["coin_name", "value", "date", "time"])
         writer.writeheader()
         writer.writerows(coin_list_of_dicts)
@@ -77,7 +77,7 @@ def dict_to_csv(coin_list_of_dicts):
 
 def csv_to_dict(coin_dict):
     coin_list_of_dicts = []
-    with open("data.csv", mode="r") as file:
+    with open("../cache/data.csv", mode="r") as file:
         reader = csv.DictReader(file)
         for row in reader:
             coin_list_of_dicts.append(row)
@@ -105,6 +105,29 @@ def csv_to_dict(coin_dict):
     return coin_dict
 
 
+"""
+    scrape_data(soup, coins)
+
+    This function scrapes and saves coin data onto a csv
+    It is intended to be automated and run every couple
+    minutes.
+
+    Parameters:
+        soup - BeautifulSoup object
+        coins - list of coins to scrape data from
+"""
+
+def scrape_data(soup, coins):
+    # Retrieve saved data in csv
+    coin_dict = csv_to_dict(coin_dict)
+    # Scrape data onto dictionary
+    coin_dict = get_coin_info(soup, coins, coin_dict)
+    # Convert dictionary to list of dictionaries
+    coin_list_of_dicts = convert_to_list_of_dicts(coin_dict)
+    # Save list of dictionaries data onto csv file
+    dict_to_csv(coin_list_of_dicts)
+
+
 def main():
     url = "https://www.coingecko.com"
     header = {
@@ -115,30 +138,8 @@ def main():
     coin_dict = defaultdict(list)
 
     # Testing functionality:
+    scrape_data(soup, coins)
 
-    # Retrieve saved data in csv
-    coin_dict = csv_to_dict(coin_dict)
-    # Scrape data onto dictionary
-    coin_dict = get_coin_info(soup, coins, coin_dict)
-    # Convert dictionary to list of dictionaries
-    coin_list_of_dicts = convert_to_list_of_dicts(coin_dict)
-    # Save list of dictionaries into csv
-    dict_to_csv(coin_list_of_dicts)
-
-    print(coin_dict)
-
-    time.sleep(30)
-
-    # Retrieve saved data in csv
-    coin_dict = csv_to_dict(coin_dict)
-    # Scrape data onto dictionary
-    coin_dict = get_coin_info(soup, coins, coin_dict)
-    # Convert dictionary to list of dictionaries
-    coin_list_of_dicts = convert_to_list_of_dicts(coin_dict)
-    # Save list of dictionaries into csv
-    dict_to_csv(coin_list_of_dicts)
-
-    print(coin_dict)
-
+    time.sleep(10)
 
 main()
