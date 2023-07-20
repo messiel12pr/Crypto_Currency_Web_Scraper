@@ -12,3 +12,6 @@ env/
 # Ignore editor specific files
 *.swp
 *.swo
+
+# Ignore cache files
+cache

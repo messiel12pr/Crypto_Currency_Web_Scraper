@@ -15,7 +15,18 @@ class Coin_info:
     date: str
     time: str
 
+'''
+    initialize_soup(url, header)
 
+    Creates, initializes a beautifulSoup object
+
+    Parameters:
+        url - target website url
+        header - user agent header
+
+    Returns:
+        soup - initialized soup object
+'''
 def initialize_soup(url, header):
     soup = None
 
@@ -29,7 +40,20 @@ def initialize_soup(url, header):
 
     return soup
 
+'''
+    get_coin_info(soup, coins, coin_dict)
 
+    Scrapes a website for coin info and stores this data
+    into a dictionary.
+
+    Parameters:
+        soup - BeautifulSoup object
+        coins - list of coins to scrape data from
+        coin_dict - dictionary to store data into
+
+    Returns:
+        coin_dict - populated dictionary
+'''
 def get_coin_info(soup, coins, coin_dict):
     section = soup.find_all("tr")
 
@@ -53,7 +77,19 @@ def get_coin_info(soup, coins, coin_dict):
 
     return coin_dict
 
+'''
+    convert_to_list_of_dicts(coin_dict)
 
+    Converts a dictionary into a list o dictionaries
+    for later use when transfering this data onto a 
+    csv file.
+
+    Parameters:
+        coin_dict - dictionary containing coin info
+
+    Returns:
+        result - a list of dictionaries
+'''
 def convert_to_list_of_dicts(coin_dict):
     result = []
     for coin_name, coin_info_list in coin_dict.items():
@@ -67,14 +103,31 @@ def convert_to_list_of_dicts(coin_dict):
             result.append(coin_data)
     return result
 
+'''
+    dict_to_csv(coin_list_of_dicts)
 
+    Populates a csv file with data from a dictionary
+
+    Parameters:
+        coin_list_of_dicts - list of dictionaries
+'''
 def dict_to_csv(coin_list_of_dicts):
     with open("cache/data.csv", mode="w", newline="") as file:
         writer = csv.DictWriter(file, fieldnames=["coin_name", "value", "date", "time"])
         writer.writeheader()
         writer.writerows(coin_list_of_dicts)
 
+'''
+    csv_to_dict(coin_dict)
 
+    Populates a dictionary with data from a csv file
+
+    Parameters:
+        coin_dict - empty dictionary
+
+    Returns:
+        coin_dict - populated dictionary
+'''
 def csv_to_dict(coin_dict):
     coin_list_of_dicts = []
     with open("cache/data.csv", mode="r") as file:
@@ -91,7 +144,7 @@ def csv_to_dict(coin_dict):
         if coin_name not in coin_dict:
             coin_dict[coin_name] = []
 
-        # Make sure we put duplicates in the dict values for a given key
+        # Make sure we don't insert duplicates in the dict values for a given key
         coin_info_arr = coin_dict[coin_name]
         flag = False
         for i in coin_info_arr:
@@ -104,7 +157,14 @@ def csv_to_dict(coin_dict):
 
     return coin_dict
 
+'''
+    csv_to_string()
 
+    This displays the csv file we use for coin info storage
+
+    Returns:
+        csv_string - string representation of csv file
+'''
 def csv_to_string():
     csv_string = ''
     with open("cache/data.csv", mode='r') as file:
