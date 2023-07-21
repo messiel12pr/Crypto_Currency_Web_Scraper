@@ -13,5 +13,5 @@ env/
 *.swp
 *.swo
 
-# Ignore cache files
-cache
+.vscode/
+

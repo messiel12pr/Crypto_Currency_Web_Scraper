@@ -10,7 +10,7 @@ soup = scraper.initialize_soup(url, header)
 
 @app.route("/")
 def index():
-    print(scraper.scrape_data(soup, coins))
+    print(scraper.csv_to_string())
     return render_template("index.html")
 
 
