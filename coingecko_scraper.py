@@ -196,21 +196,3 @@ def scrape_data(soup, coins):
     coin_list_of_dicts = convert_to_list_of_dicts(coin_dict)
     # Save list of dictionaries data onto csv file
     dict_to_csv(coin_list_of_dicts)
-
-
-def main():
-    url = "https://www.coingecko.com"
-    header = {
-        "User-Agent": "Mozilla/5.0 (iPad; CPU OS 12_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148"
-    }
-    coins = ["Bitcoin", "Ethereum", "Tether", "Cardano", "Solana"]
-    soup = initialize_soup(url, header)
-
-    # Testing functionality:
-    scrape_data(soup, coins)
-
-    print(csv_to_string())
-
-    scrape_data(soup, coins)
-
-main()
