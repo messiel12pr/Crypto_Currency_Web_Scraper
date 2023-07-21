@@ -1,13 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta http-equiv="X-UA-Compatible" content="ie-edge">
-        <link rel="stylesheet" href="../static/CSS/style.css">
-        <title>Coingecko Web Scraper</title>
-    </head>
-    <body>
-        <div class="container"></div>
-    </body>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie-edge">
+    <link rel="stylesheet" href="../static/CSS/style.css">
+    <title>Coingecko Web Scraper</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="float-conainer">
+            <div class="options-container">
+                <div class="float-child">
+                    <form action="http://127.0.0.1:5000/add-coin" method="post">
+                        <p style="color: white;">Add Coin:</p>
+                        <input class="input-text" type="text" name="coin_name" />
+                        <input class="input-text-submit" type="submit" value="ADD" />
+                    </form>
+                </div>
+
+                <div class="float-child">
+                    <form action="http://127.0.0.1:5000/remove-coin" method="post">
+                        <p style="color: white;">Remove Coin:</p>
+                        <input class="input-text" type="text" name="coin_name" />
+                        <input class="input-text-submit" type="submit" value="REMOVE" />
+                    </form>
+                </div>
+
+                <div class="float-child">
+                    <form action="http://127.0.0.1:5000/show-graph" method="post">
+                        <p style="color: white;">Show Graph:</p>
+                        <input class="input-text" type="text" name="coin_name" />
+                        <input class="input-text-submit" type="submit" value="SHOW">
+                    </form>
+                </div>
+            </div>
+
+            <div class="graph-container">
+
+            </div>
+
+            <div style="width: 44%;" class="float-child">
+                <form action="http://127.0.0.1:5000/run-scraper" method="post">
+                    <input class="button" type="submit" value="Run Scraper">
+                </form>
+            </div>
+
+            <div style="width: 44%;" class="float-child">
+                <form action="http://127.0.0.1:5000/stop-scraper" method="post">
+                    <input class="button" type="submit" value="Stop Scraper">
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+
 </html>
