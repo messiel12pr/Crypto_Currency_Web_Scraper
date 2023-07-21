@@ -10,7 +10,6 @@ soup = scraper.initialize_soup(url, header)
 
 @app.route("/")
 def index():
-    print(scraper.csv_to_string())
     return render_template("index.html")
 
 
