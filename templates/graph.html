@@ -15,6 +15,16 @@
         <div id="graph-container">
             {{ plot | safe }}
         </div>
+        <form>
+            <input style="margin-top: 92px;" class="button" type="submit" value="Home" onclick="redirectToHome()">
+        </form>
+
+        <script>
+            function redirectToHome() {
+                event.preventDefault();
+                window.location.href = '/';
+            }
+        </script>
     </div>
 </body>
 

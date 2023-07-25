@@ -6,6 +6,9 @@ import requests
 from datetime import datetime, timedelta
 import time
 from collections import defaultdict
+import plotly.graph_objects as go
+import pandas as pd
+from io import StringIO
 import csv
 
 
@@ -104,15 +107,44 @@ def convert_to_list_of_dicts(coin_dict):
     return result
 
 '''
+    convert_to_list_of_dicts(coin_dict)
+
+    Converts a dictionary into a list o dictionaries
+    for later use when transfering this data onto a 
+    csv file.
+
+    Parameters:
+        coin_dict - dictionary containing coin info
+        coin - name of coin we want to query
+
+    Returns:
+        result - a list of dictionaries
+'''
+def convert_to_list_of_dicts(coin_dict, coin):
+    result = []
+    for coin_name, coin_info_list in coin_dict.items():
+        if coin_name == coin:
+            for coin_info in coin_info_list:
+                coin_data = {
+                    "coin_name": coin_name,
+                    "value": coin_info.value,
+                    "date": coin_info.date,
+                    "time": coin_info.time,
+                }
+                result.append(coin_data)
+    return result
+
+'''
     dict_to_csv(coin_list_of_dicts)
 
     Populates a csv file with data from a dictionary
 
     Parameters:
         coin_list_of_dicts - list of dictionaries
+        csv_name - name of csv
 '''
-def dict_to_csv(coin_list_of_dicts):
-    with open("cache/data.csv", mode="w", newline="") as file:
+def dict_to_csv(coin_list_of_dicts, csv_name):
+    with open(csv_name, mode="w", newline="") as file:
         writer = csv.DictWriter(file, fieldnames=["coin_name", "value", "date", "time"])
         writer.writeheader()
         writer.writerows(coin_list_of_dicts)
@@ -195,4 +227,59 @@ def scrape_data(soup, coins):
     # Convert dictionary to list of dictionaries
     coin_list_of_dicts = convert_to_list_of_dicts(coin_dict)
     # Save list of dictionaries data onto csv file
-    dict_to_csv(coin_list_of_dicts)
+    dict_to_csv(coin_list_of_dicts, "cache/data.csv")
+
+def graph_data(coin_name):
+
+    coin_dict = defaultdict(list)
+    # Retrieve saved data in csv
+    coin_dict = csv_to_dict(coin_dict)
+    coin_list_of_dicts = convert_to_list_of_dicts(coin_dict, coin_name)
+    dict_to_csv(coin_list_of_dicts, "cache/graph_data.csv")
+
+    # For reading from CSV file, use this instead:
+    df = pd.read_csv("cache/graph_data.csv")
+
+    fig = go.Figure()
+
+    # Loop through each unique coin_name in the DataFrame and create a trace for it
+    for coin_name in df['coin_name'].unique():
+        coin_df = df[df['coin_name'] == coin_name]
+        
+        # Convert the date and time columns to a single datetime column
+        coin_df['datetime'] = pd.to_datetime(coin_df['date'] + ' ' + coin_df['time'])
+        
+        fig.add_trace(
+            go.Scatter(
+                x=coin_df['datetime'],
+                y=coin_df['value'],
+                mode='lines',
+                name=coin_name
+            )
+        )
+
+    # Update layout to add titles and labels
+    fig.update_layout(
+        title='Cryptocurrency Values Over Time',
+        xaxis_title='Date and Time',
+        yaxis_title='Value',
+        xaxis=dict(
+            rangeselector=dict(
+                buttons=list([
+                    dict(count=1, label='1d', step='day', stepmode='backward'),
+                    dict(count=7, label='1w', step='day', stepmode='backward'),
+                    dict(count=1, label='1m', step='month', stepmode='backward'),
+                    dict(count=6, label='6m', step='month', stepmode='backward'),
+                    dict(count=1, label='YTD', step='year', stepmode='todate'),
+                    dict(count=1, label='1y', step='year', stepmode='backward'),
+                    dict(step='all')
+                ])
+            ),
+            rangeslider=dict(
+                visible=True
+            ),
+            type='date'
+        )
+    )
+
+    return fig
