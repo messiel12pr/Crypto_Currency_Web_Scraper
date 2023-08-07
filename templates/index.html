@@ -40,9 +40,16 @@
             </div>
 
             <div class="home-container">
-                <h3 style="margin-top: 155px; text-align: center; color:#3498db;">Let's just pretend we see coin names
-                    here
-                    &#x1F614;</h3>
+                <H4 class="home-container-header">Tracked Coins:</H3>
+                    <div id="dynamic-div">
+                        <ul>
+                            {% for text in text_list %}
+                            <li>
+                                <p>{{ text }}</p>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
             </div>
 
             <div style="width: 44%;" class="float-child">

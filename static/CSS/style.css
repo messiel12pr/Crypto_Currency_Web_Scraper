@@ -88,3 +88,16 @@ body {
 .button:hover {
     background-color: #2980b9;
 }
+
+#dynamic-div {
+    text-align: left;
+    font-size: 20px;
+    color: #3498db;
+    padding: 0px 0px 0px 50px;
+}
+
+.home-container-header {
+    text-align: center;
+    font-size: 25px;
+    color: #3498db;
+}

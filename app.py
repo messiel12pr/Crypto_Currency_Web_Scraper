@@ -20,15 +20,17 @@ def index():
 def add_coin():
     if request.method == 'POST':
         coin = request.form['coin_name'].strip()
-        if coin not in coins:
+        if coin not in coins and len(coins) != 4:
             coins.append(coin)
             print('Coin succesfully added')
         
+        elif len(coins) == 4:
+            print("Cannot track more than 4 coins at a time")
+
         else:
             # TODO find a way to display eror messages to user
             print('Coin was already found in the coin list')
-
-    return render_template("index.html")
+    return render_template("index.html", text_list=coins)
 
 @app.route('/remove-coin', methods = ['POST', 'GET'])
 def remove_coin():
