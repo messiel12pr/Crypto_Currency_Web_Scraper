@@ -120,10 +120,10 @@ def convert_to_list_of_dicts(coin_dict):
     Returns:
         result - a list of dictionaries
 '''
-def convert_to_list_of_dicts(coin_dict, coin):
+def convert_to_list_of_dicts(coin_dict, coins):
     result = []
     for coin_name, coin_info_list in coin_dict.items():
-        if coin_name == coin:
+        if coin_name in coins:
             for coin_info in coin_info_list:
                 coin_data = {
                     "coin_name": coin_name,
@@ -225,7 +225,7 @@ def scrape_data(soup, coins):
     # Scrape data onto dictionary
     coin_dict = get_coin_info(soup, coins, coin_dict)
     # Convert dictionary to list of dictionaries
-    coin_list_of_dicts = convert_to_list_of_dicts(coin_dict)
+    coin_list_of_dicts = convert_to_list_of_dicts(coin_dict, coins)
     # Save list of dictionaries data onto csv file
     dict_to_csv(coin_list_of_dicts, "cache/data.csv")
 

@@ -50,7 +50,7 @@ def scraper_task():
         print('Scraper running')
         scraper.scrape_data(soup, coins)
         # This will run every 10 minutes once activated
-        time.sleep(5)
+        time.sleep(600)
 
 @app.route('/run-scraper', methods=['POST', 'GET'])
 def run_scraper():
