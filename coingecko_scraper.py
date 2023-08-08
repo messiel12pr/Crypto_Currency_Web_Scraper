@@ -69,12 +69,12 @@ def get_coin_info(soup, coins, coin_dict):
         )
         coin_value = section[i].find("span", class_="no-wrap")
 
-        if coin_name and coin_value and (coin_name.text.strip() in coins):
+        if coin_name and coin_value and (coin_name.text.strip().upper() in coins):
             # Parsing and storing coin info
             parsed_value = float(
                 coin_value.text.replace("$", "").replace(",", "").strip()
             )
-            coin_dict[coin_name.text.strip()].append(
+            coin_dict[coin_name.text.strip().upper()].append(
                 Coin_info(parsed_value, current_date, current_time)
             )
 

@@ -20,12 +20,15 @@ def index():
 def add_coin():
     if request.method == 'POST':
         error = ""
-        coin = request.form['coin_name'].strip()
-        if coin not in coins and len(coins) != 4:
+        coin = request.form['coin_name'].strip().upper()
+        if coin not in coins and len(coins) != 4 and coin != "":
             coins.append(coin)
         
         elif len(coins) == 4:
             error = "ERROR ADDING COIN: Cannot track more than 4 coins at a time"
+
+        elif coin == "":
+            error = 'ERROR ADDING COIN: Null coin value'
 
         else:
             error = 'ERROR ADDING COIN: Coin is already being Tracked'
@@ -36,8 +39,8 @@ def add_coin():
 def remove_coin():
     if request.method == 'POST':
         error = ""
-        coin = request.form['coin_name'].strip()
-        
+        coin = request.form['coin_name'].strip().upper()
+
         if coin in coins:
             coins.remove(coin)
         
