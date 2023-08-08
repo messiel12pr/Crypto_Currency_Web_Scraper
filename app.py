@@ -19,32 +19,35 @@ def index():
 @app.route('/add-coin', methods = ['POST', 'GET'])
 def add_coin():
     if request.method == 'POST':
-        coin = request.form['coin_name'].strip()
-        if coin not in coins and len(coins) != 4:
+        error = ""
+        coin = request.form['coin_name'].strip().upper()
+        if coin not in coins and len(coins) != 4 and coin != "":
             coins.append(coin)
-            print('Coin succesfully added')
         
         elif len(coins) == 4:
-            print("Cannot track more than 4 coins at a time")
+            error = "ERROR ADDING COIN: Cannot track more than 4 coins at a time"
+
+        elif coin == "":
+            error = 'ERROR ADDING COIN: Null coin value'
 
         else:
-            # TODO find a way to display eror messages to user
-            print('Coin was already found in the coin list')
-    return render_template("index.html", text_list=coins)
+            error = 'ERROR ADDING COIN: Coin is already being Tracked'
+
+    return render_template("index.html", text_list=coins, error_message=error)
 
 @app.route('/remove-coin', methods = ['POST', 'GET'])
 def remove_coin():
     if request.method == 'POST':
-        coin = request.form['coin_name'].strip()
+        error = ""
+        coin = request.form['coin_name'].strip().upper()
+
         if coin in coins:
             coins.remove(coin)
         
         else:
-            # TODO find a way to display eror messages to user
-            print('Coin not found')
-        print(coins)
+            error = 'ERROR REMOVING COIN: Coin not found in Tracked Coins'
 
-    return render_template("index.html")
+    return render_template("index.html", error_message=error)
 
 def scraper_task():
     global scraper_running
@@ -56,6 +59,7 @@ def scraper_task():
 
 @app.route('/run-scraper', methods=['POST', 'GET'])
 def run_scraper():
+    error = ""
     global scraper_running
     if not scraper_running and len(coins) != 0:
         # Start the scraper in a background thread
@@ -64,10 +68,9 @@ def run_scraper():
         scraper_thread.start()
 
     else:
-        # TODO find a way to display eror messages to user
-        print('Add some coins to track first!')
+        error = 'ERROR RUNNING SCRAPER: You need atleast one coin in Tracked coins in order to run the scraper'
 
-    return render_template("index.html")
+    return render_template("index.html", error_message=error)
 
 @app.route('/stop-scraper', methods=['POST', 'GET'])
 def stop_scraper():
@@ -79,17 +82,16 @@ def stop_scraper():
 @app.route('/show-graph', methods = ['POST', 'GET'])
 def show_graph():
     if request.method == 'POST':
+        error = ""
         coin = request.form['coin_name'].strip()
         if coin in coins:
-            print('Displaying graph')
             fig = scraper.graph_data(coin)
             return render_template('graph.html', plot=fig.to_html(full_html=False, include_plotlyjs='cdn'))
 
         else:
-            # TODO find a way to display eror messages to user
-            print('Error displaying graph: Coin not found')
+            error = 'ERROR DISPLAYING GRAPH: Coin not found in Tracked Coins'
     
-    return render_template("index.html")    
+    return render_template("index.html", error_message=error)    
 
 if __name__ == "__main__":
     app.run(debug=True)
